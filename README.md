@@ -51,7 +51,8 @@ As with any TTS model, the output quality heavily relies on the quality of the i
 
 ## How to Get Started with the Model
 
-I included a Dockerfile and a main.py file, so you can simply use docker compose to get it started:
+I included a Dockerfile and a main.py file, so you can simply use docker compose to get it started. It uses kokoro-onnx Version 0.5.0.
+You may need to adjust some thread settings in the docker-compose.yml to make it work faster on your personal setup.
 
 docker-compose.yml
 ```yml
@@ -113,7 +114,7 @@ If you use this model, please credit the original authors:
   title = {Kokoro German Voice - Martin},
   year = {2025},
   publisher = {Hugging Face},
-  howpublished = {\url{[https://huggingface.co/kikiri-tts/kikiri-german-martin](https://huggingface.co/kikiri-tts/kikiri-german-martin)}}
+  howpublished = {\url{https://huggingface.co/kikiri-tts/kikiri-german-martin}}
 }
 
 @misc{kokoro-82m,
@@ -121,6 +122,6 @@ If you use this model, please credit the original authors:
   title = {Kokoro-82M},
   year = {2024},
   publisher = {Hugging Face},
-  howpublished = {\url{[https://huggingface.co/hexgrad/Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)}}
+  howpublished = {\url{https://huggingface.co/hexgrad/Kokoro-82M}}
 }
 ```
