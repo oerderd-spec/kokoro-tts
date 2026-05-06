@@ -31,7 +31,7 @@ Sample:
 
 This is an acoustic Text-to-Speech model based on the Kokoro architecture, specifically tailored for the German language featuring the single male voice "Martin". It has been exported to the ONNX graph format to maximize compatibility and performance.
 
-- **Developed by:** Original model by `kikiri-tts`, ONNX conversion by huggingFresse
+- **Developed by:** Original model by `dida-80b` and `kikiri-tts`, ONNX conversion by `huggingFresse`
 - **Model type:** Text-to-Speech (Acoustic Model)
 - **Language(s) (NLP):** German (de)
 - **License:** Apache 2.0
