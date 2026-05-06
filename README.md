@@ -4,7 +4,6 @@ language:
 - de
 base_model:
 - kikiri-tts/kikiri-german-martin
-- kikiri-tts/kikiri-german-base-51speakers-synthetic
 pipeline_tag: text-to-speech
 tags:
 - onnx
