@@ -41,6 +41,7 @@ This is an acoustic Text-to-Speech model based on the Kokoro architecture, speci
 ### Model Sources
 
 - **Original Repository:** [kikiri-tts/kikiri-german-martin](https://huggingface.co/kikiri-tts/kikiri-german-martin)
+- **Base Model:** [dida-80b/kokoro-german-hui-multispeaker-base](https://huggingface.co/dida-80b/kokoro-german-hui-multispeaker-base)
 - **Kokoro Architecture:** [hexgrad/Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)
 
 ## Uses
@@ -119,9 +120,17 @@ If you use this model, please credit the original authors:
 @misc{kikiri-german-martin,
   author = {kikiri-tts},
   title = {Kokoro German Voice - Martin},
-  year = {2025},
+  year = {2026},
   publisher = {Hugging Face},
   howpublished = {\url{https://huggingface.co/kikiri-tts/kikiri-german-martin}}
+}
+
+@misc{kokoro-german-hui-multispeaker-base,
+  author = {dida-80b},
+  title = {Kokoro German — HUI Multispeaker Base (Stage 1)},
+  year = {2026},
+  publisher = {Hugging Face},
+  howpublished = {\url{https://huggingface.co/dida-80b/kokoro-german-hui-multispeaker-base/tree/main}}
 }
 
 @misc{kokoro-82m,
