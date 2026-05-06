@@ -21,7 +21,7 @@ By using the ONNX format, you can run this german Text-to-Speech model without n
 
 Sample:
 <audio controls>
-  <source src="resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
+  <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
 </audio>
 
