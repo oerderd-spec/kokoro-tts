@@ -19,6 +19,12 @@ This repository provides an **ONNX exported version** of the excellent German Ko
 
 By using the ONNX format, you can run this german Text-to-Speech model without needing PyTorch. This results in significantly faster inference times (x2), a lower memory footprint, and easier integration into various environments like C++, Rust, mobile apps, or web servers using the ONNX Runtime.
 
+Sample:
+<audio controls>
+  <source src="resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
+  Your browser says no to audio (but at least it rhymes)
+</audio>
+
 ## Model Details
 
 ### Model Description
