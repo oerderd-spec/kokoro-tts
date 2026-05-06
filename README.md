@@ -4,6 +4,7 @@ language:
 - de
 base_model:
 - kikiri-tts/kikiri-german-martin
+- dida-80b/kokoro-german-hui-multispeaker-base
 pipeline_tag: text-to-speech
 tags:
 - onnx
