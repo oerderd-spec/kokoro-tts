@@ -3,7 +3,6 @@ license: apache-2.0
 language:
 - de
 base_model:
-- dida-80b/kokoro-german-hui-multispeaker-base
 - kikiri-tts/kikiri-german-martin
 pipeline_tag: text-to-speech
 tags:
