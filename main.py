@@ -19,7 +19,7 @@ DEFAULT_VOICE = os.getenv("KOKORO_ONNX_VOICE", "martin")
 DEFAULT_LANG = os.getenv("KOKORO_ONNX_LANG", "de")
 SAMPLE_RATE = 24000
 
-# Pause aus Docker-Compose laden (Standard: 0.25 Sekunden, vielen Dank an notimp für den Pausen-Code, siehe https://github.com/hexgrad/kokoro/issues/290#issuecomment-4415522841)
+# Pause aus Docker-Compose laden (Standard: 0.25 Sekunden, vielen Dank an https://github.com/notimp für den Pausen-Code!)
 PAUSE_DURATION = float(os.getenv("KOKORO_PAUSE_DURATION", "0.25"))
 MAX_WORKERS = int(os.getenv("KOKORO_MAX_WORKERS", "4"))
 
@@ -76,14 +76,45 @@ def split_into_sentences(text: str):
 def process_sentence(item):
     """Wird im ThreadPool ausgeführt."""
     idx, sentence, voice, speed, lang, tts_instance = item
+    
+    # 1. Zeilenumbrüche entfernen, da diese intern bei kokoro-onnx 
+    # zu "input=2" führen, wenn der Satz damit endet.
+    sentence = sentence.replace('\n', ' ').strip()
+    
+    # 2. Problematische End-Satzzeichen (wie Doppelpunkte) entschärfen.
+    # Da wir nach diesem Satzteil sowieso eine Pause einfügen, reicht dem
+    # Phonemizer ein einfaches Komma, damit er nicht abstürzt.
+    safe_sentence = re.sub(r'[:<>"«‹–“]', ',', sentence).strip()
+    
+    if not safe_sentence:
+        return idx, None, None, "Satz leer oder nur Sonderzeichen"
+        
     try:
         samples, sr = tts_instance.create(
-            text=sentence,
+            text=safe_sentence,
             voice=voice,
             speed=speed,
             lang=lang
         )
         return idx, samples, sr, None
+    except ValueError as e:
+        err_str = str(e)
+        if "number of lines in input and output must be equal" in err_str:
+            # ROBUSTER FALLBACK: Wenn espeak crasht (z.B. wegen Abkürzungen
+            # oder komischen Zeichen), entfernen wir einfach alle Satzzeichen.
+            very_safe = re.sub(r'[^\w\säöüßÄÖÜ]', ' ', safe_sentence).strip()
+            if very_safe:
+                try:
+                    samples, sr = tts_instance.create(
+                        text=very_safe,
+                        voice=voice,
+                        speed=speed,
+                        lang=lang
+                    )
+                    return idx, samples, sr, None
+                except Exception as e2:
+                    return idx, None, None, f"Fallback fehlgeschlagen: {e2}"
+        return idx, None, None, err_str
     except Exception as e:
         return idx, None, None, str(e)
 
@@ -136,12 +167,12 @@ async def generate_speech(request: Request):
             all_audio.append(samples)
             
             if req_pause_duration > 0:
-                if num_sentences > 1 and i < num_sentences - 1:
-                    # Fall 1: Mehrere Sätze -> Pause NUR dazwischen
+                if i < num_sentences - 1:
+                    # Pause zwischen den Sätzen
                     pause = np.zeros(int(SAMPLE_RATE * req_pause_duration), dtype=np.float32)
                     all_audio.append(pause)
-                elif num_sentences == 1:
-                    # Fall 2: Nur ein einzelner Satz -> Pause am Ende erzwingen
+                elif i == num_sentences - 1:
+                    # Diese Pause hilft dem I2S-Puffer des Speakers (z.B. ESPHome) zu leeren und die Status-LED geht aus.
                     pause = np.zeros(int(SAMPLE_RATE * req_pause_duration), dtype=np.float32)
                     all_audio.append(pause)
                     
