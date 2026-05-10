@@ -19,7 +19,7 @@ DEFAULT_VOICE = os.getenv("KOKORO_ONNX_VOICE", "martin")
 DEFAULT_LANG = os.getenv("KOKORO_ONNX_LANG", "de")
 SAMPLE_RATE = 24000
 
-# Pause aus Docker-Compose laden (Standard: 0.25 Sekunden, vielen Dank an https://github.com/notimp für den Pausen-Code!)
+# Pause aus Docker-Compose laden (Standard: 0.25 Sekunden, vielen Dank an notimp für den Pausen-Code, siehe https://github.com/hexgrad/kokoro/issues/290#issuecomment-4415522841)
 PAUSE_DURATION = float(os.getenv("KOKORO_PAUSE_DURATION", "0.25"))
 MAX_WORKERS = int(os.getenv("KOKORO_MAX_WORKERS", "4"))
 
