@@ -19,8 +19,8 @@ DEFAULT_VOICE = os.getenv("KOKORO_ONNX_VOICE", "martin")
 DEFAULT_LANG = os.getenv("KOKORO_ONNX_LANG", "de")
 SAMPLE_RATE = 24000
 
-# Pause aus Docker-Compose laden (Standard: 0.3 Sekunden, vielen Dank an https://github.com/notimp für den Pausen-Code!)
-PAUSE_DURATION = float(os.getenv("KOKORO_PAUSE_DURATION", "0.3"))
+# Pause aus Docker-Compose laden (Standard: 0.25 Sekunden, vielen Dank an https://github.com/notimp für den Pausen-Code!)
+PAUSE_DURATION = float(os.getenv("KOKORO_PAUSE_DURATION", "0.25"))
 MAX_WORKERS = int(os.getenv("KOKORO_MAX_WORKERS", "4"))
 
 # ONNX / CPU Optimierung
@@ -99,7 +99,7 @@ async def generate_speech(request: Request):
     data = await request.json()
     text = str(data.get("input") or "")
     voice = str(data.get("voice") or DEFAULT_VOICE)
-    speed = float(data.get("speed") or 1.0)
+    speed = float(data.get("speed") or 1.125)
     lang = str(data.get("lang") or data.get("language") or DEFAULT_LANG)
     req_pause_duration = float(data.get("pause_duration", PAUSE_DURATION))
     
