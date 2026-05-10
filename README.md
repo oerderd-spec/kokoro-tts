@@ -20,13 +20,13 @@ This repository provides an **ONNX exported version** of the excellent (but unfi
 By using the ONNX format, you can run this german Text-to-Speech model without needing PyTorch. This results in significantly faster inference times (x2), a lower memory footprint, and easier integration into various environments like C++, Rust, mobile apps, or web servers using the ONNX Runtime.
 
 
-Sample 1: with 0.3s pause between each sentence
+Sample 1: 0.25s pause between each sentence, speed = 1.125
 <audio controls>
-  <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel-0.3pause.mp3" type="audio/mpeg">
+  <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel-0.25pause.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
 </audio>
 
-Sample 2: without pauses
+Sample 2: no additional pauses, speed = 1.0
 <audio controls>
   <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
@@ -86,7 +86,7 @@ services:
       - MKL_NUM_THREADS=4
       - NUMEXPR_NUM_THREADS=4
       - OMP_WAIT_POLICY=PASSIVE
-      - KOKORO_PAUSE_DURATION=0.3
+      - KOKORO_PAUSE_DURATION=0.25
       - KOKORO_MAX_WORKERS=2
 ```
 
