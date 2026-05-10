@@ -19,7 +19,14 @@ This repository provides an **ONNX exported version** of the excellent (but unfi
 
 By using the ONNX format, you can run this german Text-to-Speech model without needing PyTorch. This results in significantly faster inference times (x2), a lower memory footprint, and easier integration into various environments like C++, Rust, mobile apps, or web servers using the ONNX Runtime.
 
-Sample:
+
+Sample 1: with 0.3s pause between each sentence
+<audio controls>
+  <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel-0.3pause.mp3" type="audio/mpeg">
+  Your browser says no to audio (but at least it rhymes)
+</audio>
+
+Sample 2: without pauses
 <audio controls>
   <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
@@ -79,6 +86,8 @@ services:
       - MKL_NUM_THREADS=4
       - NUMEXPR_NUM_THREADS=4
       - OMP_WAIT_POLICY=PASSIVE
+      - KOKORO_PAUSE_DURATION=0.3
+      - KOKORO_MAX_WORKERS=2
 ```
 
 If you want to use it in Home Assistant, this is an easy way to make it wyoming-ready (just add this into your docker-compose.yml):
