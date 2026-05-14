@@ -31,9 +31,9 @@ This sample demonstrates the v1.1 normalization layer for dates, times, decimal 
 </audio>
 
 Spoken text (v1.1):
-```text
-Zum 14.05.2026 um 18:20 Uhr ist das Abendessen geplant. Für den Auflauf brauchen wir 1,5 kg Kartoffeln, 500 g Quark, 2 Eier, 1 ltr. Milch und ggf. 3 cm mehr Backpapier. Prof. Klein sagt: "Bitte stelle die Form auf die 2. Schiene, backe alles für 45 Min. und lass es danach 1 Min. oder auch 2 Min. ruhen." Die Kosten liegen bei ca. 12,80 EUR zzgl. Pfand.
-```
+
+> Zum 14.05.2026 um 18:20 Uhr ist das Abendessen geplant. Für den Auflauf brauchen wir 1,5 kg Kartoffeln, 500 g Quark, 2 Eier, 1 ltr. Milch und ggf. 3 cm mehr Backpapier. Prof. Klein sagt: "Bitte stelle die Form auf die 2. Schiene, backe alles für 45 Min. und lass es danach 1 Min. oder auch 2 Min. ruhen." Die Kosten liegen bei ca. 12,80 EUR zzgl. Pfand.
+
 
 ### Legacy samples: v1.0
 
@@ -127,7 +127,7 @@ services:
       - KOKORO_ONNX_INTER_OP_THREADS=2
       - KOKORO_ONNX_EXECUTION_MODE=sequential
       - KOKORO_ONNX_GRAPH_OPT=all
-      - KOKORO_ONNX_SPEED=1.0
+      - KOKORO_ONNX_SPEED=1.125
       - KOKORO_ONNX_TRIM=true
       - KOKORO_ONNX_VOICE=martin
       - KOKORO_ONNX_LANG=de
