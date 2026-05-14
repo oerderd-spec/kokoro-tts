@@ -192,7 +192,7 @@ The compose file uses conservative thread settings that work well on small machi
 
 ## Changelog
 
-### v1.1 (May 2026)
+### v1.1 (May 14, 2026)
 
 - Added German text normalization before synthesis in the included FastAPI service.
 - Decimal numbers with units are spoken correctly, for example "2,5 kWh" as "zwei komma fünf Kilowattstunden".
