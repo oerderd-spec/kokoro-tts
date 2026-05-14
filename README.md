@@ -15,7 +15,7 @@ tags:
 
 # 🗣️ Kokoro TTS - German Voice 'Martin' (ONNX)
 
-This repository provides an **ONNX exported version** with German text normalization of the excellent (but unfinished) German Kokoro TTS model [kikiri-german-martin](https://huggingface.co/kikiri-tts/kikiri-german-martin). It is a "German single-speaker TTS model fine-tuned on the **Martin Harbecke** voice using [StyleTTS2](https://github.com/yl4579/StyleTTS2) Stage 2. Built on top of [kikiri-german-base-51speakers-synthetic](https://huggingface.co/kikiri-tts/kikiri-german-base-51speakers-synthetic)."
+This repository provides an **ONNX exported version** with **German text normalization** of the German Kokoro TTS model [kikiri-german-martin](https://huggingface.co/kikiri-tts/kikiri-german-martin). It is a "German single-speaker TTS model fine-tuned on the **Martin Harbecke** voice using [StyleTTS2](https://github.com/yl4579/StyleTTS2) Stage 2. Built on top of [kikiri-german-base-51speakers-synthetic](https://huggingface.co/kikiri-tts/kikiri-german-base-51speakers-synthetic)."
 
 By using the ONNX format, you can run this german Text-to-Speech model without needing PyTorch. This results in significantly faster inference times (x2), a lower memory footprint, and easier integration into various environments like C++, Rust, mobile apps, or web servers using the ONNX Runtime.
 
