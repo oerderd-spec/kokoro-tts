@@ -82,43 +82,73 @@ As with any TTS model, the output quality heavily relies on the quality of the i
 - **Pronunciation:** The model might mispronounce rare words, foreign names, or complex compound nouns if they are not correctly converted to phonemes first.
 - **Emotion:** While the model sounds very natural, precise control over specific emotions (like shouting, crying, or whispering) is limited by the training data of the base model.
 
-## How to Get Started with the Model
+## How to run it yourself
 
-I included a Dockerfile and a main.py file, so you can simply use docker compose to get it started. It uses kokoro-onnx Version 0.5.0.
-Since v1.1, the included FastAPI service also applies a German text normalization layer via `tts_normalizer.py` and `german_text_rules.py` before synthesis.
-You may need to adjust some thread settings in the docker-compose.yml to make it work faster on your personal setup.
+The repository now contains the same two-service setup I use with Home Assistant Assist:
 
-docker-compose.yml
+- `onnx-docker/`: the Kokoro ONNX FastAPI service. It exposes an OpenAI-compatible `/v1/audio/speech` endpoint and applies the v1.1 German text normalization before synthesis.
+- `wyoming_openai_german_separator/`: a small overlay image for the Wyoming OpenAI bridge. It patches German sentence segmentation so streaming TTS does not split too early after dotted abbreviations such as `Prof.`, `Min.`, `Stck.` or `ltr.`.
+- `german_text_rules.py`: the essential shared rule file. It is mounted into both containers, so abbreviation expansion, unit handling and Wyoming sentence-boundary protection use the same source of truth. Keep this file next to `docker-compose.yml` unless you also adjust the volume mounts.
+
+### 1. Clone the model repository
+
+This is a Hugging Face model repository with Git LFS files, so make sure Git LFS is installed.
+
+```bash
+git lfs install
+git clone https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin
+cd Kokoro-82M-ONNX-German-Martin
+```
+
+### 2. Start Kokoro ONNX and the Wyoming bridge
+
+The included `docker-compose.yml` starts both the TTS service and the Wyoming bridge:
+
+```bash
+docker compose up -d --build
+```
+
+Full compose file:
+
 ```yml
 services:
+  # German Kokoro ONNX FastAPI service with v1.1 text normalization.
   kokoro-onnx:
-    build: .
+    build:
+      context: .
+      dockerfile: onnx-docker/Dockerfile
     container_name: kokoro-onnx
     restart: unless-stopped
     ports:
       - "8881:8881"
     environment:
-      - KOKORO_ONNX_THREADS=4
+      - KOKORO_ONNX_THREADS=2
+      - KOKORO_ONNX_INTRA_OP_THREADS=2
+      - KOKORO_ONNX_INTER_OP_THREADS=2
+      - KOKORO_ONNX_EXECUTION_MODE=sequential
+      - KOKORO_ONNX_GRAPH_OPT=all
+      - KOKORO_ONNX_SPEED=1.0
+      - KOKORO_ONNX_TRIM=true
       - KOKORO_ONNX_VOICE=martin
       - KOKORO_ONNX_LANG=de
-      - OMP_NUM_THREADS=4
-      - OPENBLAS_NUM_THREADS=4
-      - MKL_NUM_THREADS=4
-      - NUMEXPR_NUM_THREADS=4
+      - OMP_NUM_THREADS=2
+      - OPENBLAS_NUM_THREADS=2
+      - MKL_NUM_THREADS=2
+      - NUMEXPR_NUM_THREADS=2
       - OMP_WAIT_POLICY=PASSIVE
       - KOKORO_PAUSE_DURATION=0.25
       - KOKORO_MAX_WORKERS=2
-```
+    volumes:
+      - ./german_text_rules.py:/app/german_text_rules.py:ro
 
-If you want to use it in Home Assistant, this is an easy way to make it wyoming-ready (just add this into your docker-compose.yml):
-
-```yml
+  # Wyoming bridge for Home Assistant Assist.
   wyoming_openai_onnx:
-    image: ghcr.io/roryeckel/wyoming_openai:latest
+    build: ./wyoming_openai_german_separator
+    image: wyoming_openai_german_separator:latest
     container_name: wyoming_openai_onnx
+    restart: unless-stopped
     ports:
       - "10203:10203"
-    restart: unless-stopped
     command:
       - python3
       - -m
@@ -135,9 +165,30 @@ If you want to use it in Home Assistant, this is an easy way to make it wyoming-
       - kokoro
       - --tts-backend
       - KOKORO_FASTAPI
+    volumes:
+      - ./german_text_rules.py:/app/german_text_rules.py:ro
     depends_on:
       - kokoro-onnx
 ```
+
+### 3. Check that the services are reachable
+
+The Kokoro service should answer on port `8881`:
+
+```bash
+curl http://localhost:8881/v1/audio/voices
+```
+
+For Home Assistant, add the Wyoming integration and point it to the host running Docker:
+
+```text
+Host: <your-docker-host>
+Port: 10203
+```
+
+### Notes on performance
+
+The compose file uses conservative thread settings that work well on small machines such as an Intel NUC. If you run on a larger CPU, you can try increasing `KOKORO_ONNX_THREADS`, `OMP_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `MKL_NUM_THREADS` and `NUMEXPR_NUM_THREADS`.
 
 ## Changelog
 
@@ -186,5 +237,13 @@ If you use this model, please credit the original authors:
   year = {2024},
   publisher = {Hugging Face},
   howpublished = {\url{https://huggingface.co/hexgrad/Kokoro-82M}}
+}
+
+@misc{kokoro-82m-onnx-german-martin,
+  author = {huggingFresse},
+  title = {Kokoro-82M ONNX German Martin},
+  year = {2026},
+  publisher = {Hugging Face},
+  howpublished = {\url{https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin}}
 }
 ```
