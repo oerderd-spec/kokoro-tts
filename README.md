@@ -19,14 +19,33 @@ This repository provides an **ONNX exported version** of the excellent (but unfi
 
 By using the ONNX format, you can run this german Text-to-Speech model without needing PyTorch. This results in significantly faster inference times (x2), a lower memory footprint, and easier integration into various environments like C++, Rust, mobile apps, or web servers using the ONNX Runtime.
 
+## Audio Samples
 
-Sample 1: default (0.25s pause between sentences, speed = 1.125)
+### Main sample: v1.1 German normalization
+
+This sample demonstrates the v1.1 normalization layer for dates, times, decimal numbers, units, abbreviations, ordinals and Euro amounts.
+
+<audio controls>
+  <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel-v1.1.mp3" type="audio/mpeg">
+  Your browser says no to audio (but at least it rhymes)
+</audio>
+
+Spoken text (v1.1):
+```text
+Zum 14.05.2026 um 18:20 Uhr ist das Abendessen geplant. Für den Auflauf brauchen wir 1,5 kg Kartoffeln, 500 g Quark, 2 Eier, 1 ltr. Milch und ggf. 3 cm mehr Backpapier. Prof. Klein sagt: "Bitte stelle die Form auf die 2. Schiene, backe alles für 45 Min. und lass es danach 1 Min. oder auch 2 Min. ruhen." Die Kosten liegen bei ca. 12,80 EUR zzgl. Pfand.
+```
+
+### Legacy samples: v1.0
+
+These older samples were generated with the initial v1.0 service setup before the v1.1 German normalization layer.
+
+Sample: default (0.25s pause between sentences, speed = 1.125)
 <audio controls>
   <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel-0.25pause.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
 </audio>
 
-Sample 2: no additional pauses, speed = 1.0
+Sample: no additional pauses, speed = 1.0
 <audio controls>
   <source src="https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/martin-onnx-beispiel.mp3" type="audio/mpeg">
   Your browser says no to audio (but at least it rhymes)
@@ -66,6 +85,7 @@ As with any TTS model, the output quality heavily relies on the quality of the i
 ## How to Get Started with the Model
 
 I included a Dockerfile and a main.py file, so you can simply use docker compose to get it started. It uses kokoro-onnx Version 0.5.0.
+Since v1.1, the included FastAPI service also applies a German text normalization layer via `tts_normalizer.py` and `german_text_rules.py` before synthesis.
 You may need to adjust some thread settings in the docker-compose.yml to make it work faster on your personal setup.
 
 docker-compose.yml
@@ -118,6 +138,25 @@ If you want to use it in Home Assistant, this is an easy way to make it wyoming-
     depends_on:
       - kokoro-onnx
 ```
+
+## Changelog
+
+### v1.1 (May 2026)
+
+- Added German text normalization before synthesis in the included FastAPI service.
+- Decimal numbers with units are spoken correctly, for example "2,5 kWh" as "zwei komma fünf Kilowattstunden".
+- Added singular/plural handling for units, for example "1 Kilowattstunde" vs. "2 Kilowattstunden".
+- Added and improved abbreviations and units such as `zzgl.`, `mAh`, `mA`, `g`, `Stck.`, `Min.` and `ltr.`.
+- Added better handling for Euro amounts such as "49,99 EUR" as "neunundvierzig Euro neunundneunzig".
+- Improved German ordinal/cardinal handling in contexts such as dates, quarters, tracks, chapters and numbered labels.
+- Fixed sentence pauses around common German abbreviations and dotted unit abbreviations.
+- Added a v1.1 audio sample and the exact spoken text used for it.
+
+### v1.0 (initial release)
+
+- Initial ONNX conversion of the German Martin voice.
+- Included the basic Docker/FastAPI service files.
+- Fixed pauses after common abbreviations in the initial service setup.
 
 ## Training Details
 This repository only contains a format conversion. No additional training or fine-tuning was performed. For details regarding the training data, hyperparameters, and procedures, please refer to the base model: [kikiri-tts/kikiri-german-martin](https://huggingface.co/kikiri-tts/kikiri-german-martin).

@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir \
 COPY kokoro-martin.onnx /app/kokoro-martin.onnx
 COPY voices-martin.npz /app/voices-martin.npz
 COPY main.py /app/main.py
+COPY tts_normalizer.py /app/tts_normalizer.py
 
 EXPOSE 8881
 

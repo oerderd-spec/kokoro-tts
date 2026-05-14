@@ -37,3 +37,4 @@ martin-onnx-beispiel.mp3 filter=lfs diff=lfs merge=lfs -text
 martin-onnx-beispiel-0.3pause.mp3 filter=lfs diff=lfs merge=lfs -text
 martin-onnx-beispiel-0.25pause.mp3 filter=lfs diff=lfs merge=lfs -text
 martin-onnx-beispiel-v2.mp3 filter=lfs diff=lfs merge=lfs -text
+martin-onnx-beispiel-v1.1.mp3 filter=lfs diff=lfs merge=lfs -text
