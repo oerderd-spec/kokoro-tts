@@ -137,7 +137,7 @@ services:
       - NUMEXPR_NUM_THREADS=2
       - OMP_WAIT_POLICY=PASSIVE
       - KOKORO_PAUSE_DURATION=0.25
-      - KOKORO_MAX_WORKERS=2
+      - KOKORO_MAX_WORKERS=2 # use 1 if you encounter problems in correct word-order, a better fix will be released soon
     volumes:
       - ./german_text_rules.py:/app/german_text_rules.py:ro
 
