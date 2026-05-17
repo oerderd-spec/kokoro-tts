@@ -12,8 +12,12 @@ RUN pip install --no-cache-dir \
     numpy \
     kokoro-onnx==0.5.0
 
-COPY kokoro-martin.onnx /app/kokoro-martin.onnx
-COPY voices-martin.npz /app/voices-martin.npz
+# Download model files from HuggingFace (Git LFS not supported on Railway)
+RUN wget -q --show-progress -O /app/kokoro-martin.onnx \
+    "https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/kokoro-martin.onnx" \
+    && wget -q --show-progress -O /app/voices-martin.npz \
+    "https://huggingface.co/huggingFresse/Kokoro-82M-ONNX-German-Martin/resolve/main/voices-martin.npz"
+
 COPY german_text_rules.py /app/german_text_rules.py
 COPY onnx-docker/main.py /app/main.py
 COPY onnx-docker/tts_normalizer.py /app/tts_normalizer.py
