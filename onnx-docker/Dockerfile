@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir \
 
 COPY kokoro-martin.onnx /app/kokoro-martin.onnx
 COPY voices-martin.npz /app/voices-martin.npz
+COPY german_text_rules.py /app/german_text_rules.py
 COPY onnx-docker/main.py /app/main.py
 COPY onnx-docker/tts_normalizer.py /app/tts_normalizer.py
 
